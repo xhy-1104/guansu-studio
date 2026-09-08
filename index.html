@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2d4a3e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="观粟工作台">
+<meta name="description" content="宁化谷物艺术中心（观粟民宿）主理人一体化工作台：日程·短视频·民宿·米酒·擂茶·健身·英语·复盘·IP人设。">
+<link rel="manifest" href="manifest-studio.json">
+<link rel="apple-touch-icon" href="icons/studio-192.png">
+<link rel="icon" type="image/png" href="icons/studio-192.png">
+<title>谷物艺术中心·观粟民宿｜主理人工作台</title>
+<style>
+:root {
+  /* 主理人深度版：深绿主调 + 暖灰背景，护眼耐看 */
+  --sidebar-bg: #2d4a3e;          /* 深绿侧栏 */
+  --sidebar-text: #d8e2dc;        /* 侧栏文字 */
+  --sidebar-text-active: #ffffff;
+  --sidebar-active: #3d6650;      /* 选中项高亮 */
+  --sidebar-group: rgba(255,255,255,.32);
+  --main-bg: #f0eee6;             /* 暖灰米底（不是亮米黄） */
+  --card: #ffffff;
+  --card-soft: #faf8f3;           /* 二级卡片 */
+  --accent: #5a8a6b;              /* 苔绿（比之前的鲜绿更沉稳） */
+  --accent-light: #e3ede5;
+  --text: #1f2a26;                /* 深字主 */
+  --text-2: #4d5a55;              /* 次级 */
+  --muted: #97a39d;
+  --border: #e3dfd3;              /* 暖灰描边 */
+  --warn: #c98a2b;
+  --danger: #b35c54;
+  --c-tea: #7d9d54;
+  --c-video: #c2714e;
+  --c-bnb: #3f9d8f;
+  --c-wine: #a86270;
+  --c-life: #5a89b5;
+  /* 头部右侧小工具按钮色 */
+  --icon-btn: #4a6555;
+  --icon-btn-bg: rgba(255,255,255,.55);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; color:var(--text); background:#e9e5de; }
+.app { display:flex; min-height:100vh; }
+
+/* ===== 左侧科目式导航 ===== */
+.sidebar {
+  width:206px; background:var(--sidebar-bg); color:var(--sidebar-text);
+  position:fixed; left:0; top:0; bottom:0; z-index:100;
+  display:flex; flex-direction:column; padding:20px 12px 16px;
+  transition:transform .3s; overflow-y:auto;
+  font-size:13px;
+}
+.profile { display:flex; align-items:center; gap:10px; padding:4px 6px 18px; border-bottom:1px solid rgba(255,255,255,.08); margin-bottom:10px; }
+.avatar { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#7d9d54,#5a8a6b); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.profile-name { font-size:13px; font-weight:700; color:#fff; line-height:1.2; }
+.profile-sub { font-size:10px; color:rgba(255,255,255,.5); margin-top:3px; }
+.nav-group { font-size:11px; color:var(--sidebar-group); padding:14px 10px 6px; letter-spacing:1.5px; }
+.nav-item { display:flex; align-items:center; gap:11px; width:100%; padding:9px 12px; border-radius:10px; color:var(--sidebar-text); background:none; border:none; font-size:13px; cursor:pointer; text-align:left; transition:all .2s; margin-bottom:2px; }
+.nav-item:hover { background:rgba(255,255,255,.08); color:#fff; }
+.nav-item.active { background:var(--sidebar-active); color:var(--sidebar-text-active); font-weight:600; }
+.nav-item .ic { width:30px; height:30px; border-radius:9px; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.nav-item.active .ic { background:rgba(255,255,255,.95); color:var(--sidebar-bg); }
+.nav-item .tag { margin-left:auto; font-size:9px; background:#c2714e; padding:2px 7px; border-radius:7px; color:#fff; font-weight:600; }
+.sidebar-footer { margin-top:auto; padding-top:12px; font-size:10px; color:rgba(255,255,255,.3); text-align:center; }
+
+/* ===== 主区（参考图右侧） ===== */
+.main { flex:1; margin-left:206px; min-height:100vh; display:flex; flex-direction:column; background:var(--main-bg); }
+/* 头部：左侧面包屑+大标题 / 右侧工具按钮 */
+.main-header { background:var(--card); padding:14px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:10; }
+.menu-btn { display:none; background:none; border:none; font-size:20px; cursor:pointer; color:var(--text); }
+.breadcrumb { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
+.back-arr { color:var(--muted); font-size:16px; cursor:pointer; }
+.h-title { font-size:15px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.h-sub { font-size:11px; color:var(--muted); margin-left:8px; }
+.header-tools { display:flex; align-items:center; gap:6px; }
+.h-btn { width:34px; height:34px; border-radius:9px; background:transparent; border:none; color:var(--icon-btn); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.h-btn:hover { background:var(--accent-light); }
+.h-btn svg { width:18px; height:18px; }
+.scroll { flex:1; padding:18px 22px 50px; overflow-y:auto; }
+
+/* ===== 卡片（参考图大圆角白卡） ===== */
+.card { background:var(--card); border-radius:16px; padding:18px 20px; margin-bottom:14px; box-shadow:0 2px 6px rgba(40,50,40,.04); }
+.card-t { font-size:15px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.card-t .lft { display:flex; align-items:center; gap:8px; }
+.desc { font-size:12px; color:var(--muted); line-height:1.7; }
+
+/* ===== 标题卡（参考图"生字学习"卡） ===== */
+.title-card { background:linear-gradient(135deg,#faf6ed,#f0eee6); border:1px solid var(--border); border-radius:16px; padding:20px 22px; margin-bottom:14px; display:flex; align-items:center; gap:16px; }
+.title-card .ic-box { width:48px; height:48px; border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+.title-card .t-info { flex:1; }
+.title-card .t-info h2 { font-size:18px; font-weight:800; color:var(--text); }
+.title-card .t-info p { font-size:12px; color:var(--text-2); margin-top:3px; }
+.title-card .t-tag { background:var(--accent); color:#fff; font-size:11px; font-weight:600; padding:5px 12px; border-radius:12px; }
+.quote-band { background:#f5ede0; border-radius:12px; padding:10px 14px; font-size:12px; color:#7a5c2a; margin-bottom:14px; line-height:1.7; }
+
+/* ===== Banner ===== */
+.banner { background:linear-gradient(135deg,#3d6650 0%,#5a8a6b 100%); color:#fff; border-radius:16px; padding:22px; margin-bottom:14px; position:relative; overflow:hidden; }
+.banner::after { content:''; position:absolute; right:-40px; top:-40px; width:160px; height:160px; background:rgba(255,255,255,.1); border-radius:50%; }
+.banner-top { display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; }
+.banner-hi { font-size:18px; font-weight:800; margin-bottom:6px; }
+.banner-quote { font-size:13px; opacity:.9; margin-bottom:12px; line-height:1.7; }
+.banner-meta { font-size:11px; opacity:.7; }
+.ring-wrap { position:relative; width:72px; height:72px; flex-shrink:0; }
+.ring-num { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:17px; font-weight:800; }
+.ring-num small { font-size:9px; font-weight:400; opacity:.8; }
+
+/* ===== 优先级清单 ===== */
+.pr-item { display:flex; align-items:flex-start; gap:11px; padding:9px 12px; border-radius:10px; background:var(--card-soft); margin-bottom:7px; }
+.pr-item.done { opacity:.55; }
+.pr-item.done .pr-text { text-decoration:line-through; }
+.pr-badge { flex-shrink:0; font-size:10px; font-weight:700; padding:2px 8px; border-radius:8px; margin-top:2px; color:#fff; }
+.P0 { background:#b35c54; } .P1 { background:#c98a2b; } .P2 { background:#95a5a6; }
+.pr-text { flex:1; font-size:13px; line-height:1.55; }
+.pr-check { width:22px; height:22px; border-radius:6px; border:2px solid #cfd8dc; background:#fff; cursor:pointer; flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; }
+.pr-check.on { background:var(--accent); border-color:var(--accent); }
+
+/* ===== 28天进度条 ===== */
+.days-strip { display:flex; flex-wrap:wrap; gap:6px; }
+.days-strip .d { width:30px; height:30px; border-radius:8px; background:#eef2ef; color:#adb8b0; font-size:11px; font-weight:600; display:flex; align-items:center; justify-content:center; cursor:default; }
+.days-strip .d.done { background:var(--accent); color:#fff; }
+.days-strip .d.cur { outline:2px solid var(--accent); outline-offset:1px; color:var(--accent); font-weight:800; }
+
+/* ===== 指令区 ===== */
+.cmd-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; }
+.cmd-btn { border:1px solid var(--border); background:#fff; border-radius:12px; padding:11px 14px; text-align:left; cursor:pointer; transition:all .2s; }
+.cmd-btn:hover { border-color:var(--accent); background:var(--accent-light); }
+.cmd-btn .t { font-size:13px; font-weight:700; margin-bottom:3px; }
+.cmd-btn .s { font-size:11px; color:var(--muted); }
+
+/* ===== 表单 ===== */
+input[type=text],input[type=number],input[type=date],select,textarea { border:1px solid var(--border); border-radius:10px; padding:9px 12px; font-size:13px; font-family:inherit; outline:none; background:#fff; color:var(--text); }
+input:focus,select:focus,textarea:focus { border-color:var(--accent); }
+textarea { width:100%; resize:vertical; line-height:1.7; }
+.btn { border:none; background:var(--accent); color:#fff; font-size:13px; font-weight:600; padding:9px 18px; border-radius:20px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+.btn:hover { background:#4a7259; }
+.btn.ghost { background:var(--accent-light); color:var(--accent); }
+.btn.warn { background:var(--warn); }
+.btn.danger { background:var(--danger); }
+.btn.sm { padding:6px 14px; font-size:12px; }
+
+/* ===== 任务列表 ===== */
+.task-item { display:flex; align-items:center; gap:11px; padding:10px 13px; background:var(--card-soft); border-radius:10px; margin-bottom:7px; }
+.task-item.done { opacity:.55; }
+.task-item.done .tk-text { text-decoration:line-through; }
+.tk-cat { flex-shrink:0; font-size:10px; padding:2px 8px; border-radius:8px; color:#fff; }
+.tk-text { flex:1; font-size:13px; line-height:1.5; }
+.tk-meta { font-size:10px; color:var(--muted); margin-top:2px; }
+.date-group-t { font-size:13px; font-weight:700; color:var(--accent); margin:14px 0 7px; display:flex; align-items:center; gap:8px; }
+.date-group-t .cnt { font-size:11px; color:var(--muted); font-weight:400; }
+
+/* ===== 视频卡片 ===== */
+.video-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+.vcard { border:1px solid var(--border); border-radius:14px; padding:15px; cursor:pointer; transition:all .2s; background:#fff; }
+.vcard:hover { box-shadow:0 4px 12px rgba(45,79,62,.1); }
+.vcard.cur { border-color:var(--c-video); background:#fdf6f1; }
+.vcard-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.vday { width:30px; height:30px; border-radius:50%; background:#fbeee7; color:var(--c-video); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.vday.done { background:var(--accent); color:#fff; }
+.vbiz { font-size:10px; padding:2px 8px; border-radius:8px; background:#f1f4f2; color:var(--muted); }
+.vtitle { font-size:15px; font-weight:700; margin-bottom:5px; }
+.vshot { font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:8px; }
+.vdetail { border-top:1px dashed var(--border); margin-top:10px; padding-top:10px; }
+.vblock { background:var(--card-soft); border-radius:8px; padding:10px 12px; margin-bottom:8px; position:relative; }
+.vblock .lb { font-size:10px; color:var(--muted); margin-bottom:4px; }
+.vblock .tx { font-size:12px; line-height:1.6; padding-right:48px; }
+.copy-btn { position:absolute; top:8px; right:8px; border:1px solid var(--border); background:#fff; color:var(--accent); font-size:11px; padding:3px 9px; border-radius:8px; cursor:pointer; }
+
+/* ===== 清单 ===== */
+.chk { display:flex; align-items:center; gap:11px; padding:9px 12px; background:var(--card-soft); border-radius:10px; margin-bottom:6px; font-size:13px; line-height:1.5; cursor:pointer; }
+.chk .box { width:20px; height:20px; border-radius:6px; border:2px solid #cfd8dc; background:#fff; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; }
+.chk.on { opacity:.6; }
+.chk.on .box { background:var(--accent); border-color:var(--accent); }
+.chk.on .tx { text-decoration:line-through; }
+
+/* ===== 看板 ===== */
+.kb-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+.kb-card { border:1px solid var(--border); border-radius:14px; padding:16px; background:#fff; }
+.kb-t { font-size:14px; font-weight:700; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+.kb-pct { font-size:12px; color:var(--accent); font-weight:700; }
+.price-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; }
+.price-card { border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; background:#fff; }
+.price-name { font-size:12px; color:var(--muted); }
+.price-num { font-size:22px; font-weight:800; color:var(--c-tea); margin:4px 0; }
+.price-desc { font-size:11px; color:var(--muted); line-height:1.5; }
+
+/* ===== 复盘 ===== */
+.rev-field { margin-bottom:12px; }
+.rev-field label { display:block; font-size:12px; font-weight:700; margin-bottom:5px; }
+.rev-field textarea { min-height:60px; font-size:13px; }
+.rev-hist { border:1px solid var(--border); border-radius:10px; margin-bottom:7px; overflow:hidden; background:#fff; }
+.rev-hist-t { padding:10px 14px; background:var(--card-soft); font-size:13px; font-weight:600; cursor:pointer; display:flex; justify-content:space-between; }
+.rev-hist-b { padding:12px 14px; font-size:12px; line-height:1.7; white-space:pre-wrap; border-top:1px solid var(--border); }
+
+/* ===== IP ===== */
+.kw-chips { display:flex; flex-wrap:wrap; gap:7px; }
+.kw { background:var(--accent-light); color:var(--accent); font-size:12px; font-weight:600; padding:6px 13px; border-radius:14px; }
+.style-card { border-left:4px solid var(--accent); background:var(--card-soft); border-radius:8px; padding:13px 16px; margin-bottom:11px; position:relative; }
+.style-t { font-size:13px; font-weight:700; margin-bottom:7px; }
+.style-c { font-size:12px; line-height:1.8; color:#4a5560; white-space:pre-wrap; padding-right:52px; }
+
+/* ===== 统计小卡 ===== */
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:11px; margin-bottom:14px; }
+.stat-card { background:#fff; border:1px solid var(--border); border-radius:13px; padding:13px; }
+.stat-n { font-size:22px; font-weight:800; color:var(--accent); }
+.stat-n small { font-size:12px; color:var(--muted); font-weight:400; }
+.stat-l { font-size:11px; color:var(--muted); margin-top:3px; }
+
+/* ===== 财务 ===== */
+.fin-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:9px; background:var(--card-soft); margin-bottom:6px; font-size:13px; }
+.fin-type { font-size:10px; padding:2px 8px; border-radius:8px; color:#fff; }
+.fin-in { background:var(--accent); } .fin-out { background:var(--danger); }
+.fin-amt { font-weight:700; }
+.fin-amt.in { color:var(--accent); } .fin-amt.out { color:var(--danger); }
+
+/* ===== 英语 ===== */
+.sent-card { display:flex; align-items:center; gap:12px; padding:12px 15px; border-radius:11px; background:#edf3f9; margin-bottom:8px; }
+.sent-en { flex:1; font-size:14px; font-weight:600; color:#2c5f86; line-height:1.5; }
+.sent-btn { border:1px solid #bcd4ea; background:#fff; color:#5a89b5; font-size:11px; padding:4px 11px; border-radius:10px; cursor:pointer; flex-shrink:0; }
+.sent-btn.on { background:#5a89b5; color:#fff; border-color:#5a89b5; }
+.path { display:flex; flex-wrap:wrap; gap:7px; }
+.path .p { width:32px; height:32px; border-radius:8px; background:#eef2ef; color:#adb8b0; font-size:11px; font-weight:600; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.path .p.done { background:var(--accent); color:#fff; }
+.path .p.cur { outline:2px solid var(--accent); outline-offset:1px; color:var(--accent); font-weight:800; }
+
+/* ===== Toast / Modal ===== */
+.toast { position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:rgba(45,62,50,.92); color:#fff; font-size:13px; padding:10px 22px; border-radius:20px; opacity:0; transition:all .25s; z-index:300; pointer-events:none; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.modal-mask { position:fixed; inset:0; background:rgba(45,79,62,.55); display:flex; align-items:center; justify-content:center; z-index:200; padding:24px; }
+.modal-mask.hide { display:none; }
+.modal { background:#fff; border-radius:20px; padding:26px; width:100%; max-width:380px; }
+.modal-t { font-size:19px; font-weight:800; text-align:center; margin-bottom:6px; }
+.modal-s { font-size:12px; color:var(--muted); text-align:center; margin-bottom:18px; }
+.modal .field { margin-bottom:13px; }
+.modal label { display:block; font-size:12px; color:var(--muted); margin-bottom:5px; }
+.modal input { width:100%; }
+
+/* ===== 响应式 ===== */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:99; }
+.overlay.show { display:block; }
+/* ===== 手机底部Tab栏（App形态） ===== */
+.tabbar { display:none; position:fixed; bottom:0; left:0; right:0; height:58px; background:#fff; border-top:1px solid var(--border); z-index:60; padding-bottom:env(safe-area-inset-bottom); box-shadow:0 -2px 12px rgba(0,0,0,.06); }
+.tabbar .tabs { display:flex; height:58px; }
+.tabbar .tb { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:none; border:none; font-size:10px; color:var(--text-2); cursor:pointer; padding:4px 0; }
+.tabbar .tb .ic { font-size:20px; line-height:1; }
+.tabbar .tb.on { color:var(--sidebar-bg); font-weight:700; }
+.tabbar .tb .bdg { position:absolute; top:6px; right:calc(50% - 22px); background:#e05c5c; color:#fff; font-size:9px; font-weight:700; border-radius:8px; padding:0 5px; min-width:15px; height:15px; line-height:15px; }
+.tabbar .tb { position:relative; }
+
+@media (max-width:768px) {
+  .sidebar { transform:translateX(-100%); }
+  .sidebar.open { transform:translateX(0); }
+  .main { margin-left:0; }
+  .menu-btn { display:block; }
+  .scroll { padding:14px; padding-bottom:86px; }
+  .video-grid,.kb-grid { grid-template-columns:1fr; }
+  .title-card { flex-direction:column; text-align:center; }
+  .title-card .t-tag { align-self:center; }
+  .tabbar { display:block; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="profile">
+      <div class="avatar">🌾</div>
+      <div>
+        <div class="profile-name">观粟主理人</div>
+        <div class="profile-sub">谷物艺术中心 · 宁化</div>
+      </div>
+    </div>
+    <nav id="nav"></nav>
+    <div class="sidebar-footer">数据存于本机浏览器</div>
+  </aside>
+  <div class="overlay" id="overlay" onclick="toggleSide()"></div>
+  <main class="main">
+    <header class="main-header">
+      <button class="menu-btn" onclick="toggleSide()">☰</button>
+      <div class="breadcrumb">
+        <span class="back-arr">‹</span>
+        <span class="h-title" id="pageTitle">今日总览</span>
+        <span class="h-sub" id="headerDate"></span>
+      </div>
+      <div class="header-tools">
+        <button class="h-btn" title="搜索" onclick="toast('搜索：当前模块内查找。后续可加全局搜索')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+        <button class="h-btn" title="分享" onclick="copyText(window.location.href);toast('已复制当前页面链接 ✓')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        </button>
+        <button class="h-btn" title="设置" onclick="go('review')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+    <div class="scroll" id="view"></div>
+  </main>
+</div>
+
+<div class="tabbar" id="tabbar"></div>
+
+<div class="modal-mask" id="obModal">
+  <div class="modal">
+    <div class="modal-t">🌾 欢迎回来，主理人</div>
+    <div class="modal-s">民宿运营 · 短视频日更 · 擂茶产品 · 自律成长</div>
+    <div class="field"><label>计划开始日期（28天一轮）</label><input type="date" id="obDate"></div>
+    <div class="field"><label>当前体重（斤，选填）</label><input type="number" step="0.1" id="obWeight" placeholder="如 122"></div>
+    <button class="btn" style="width:100%;justify-content:center" onclick="finishOb()">开启我的工作台</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="studio-data.js"></script>
+<script>
+// ================= 状态 =================
+const KEY = 'guansu_studio_v1';
+function loadState(){
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if(s) return Object.assign(defState(), s); } catch(e){}
+  return defState();
+}
+function defState(){ return { startDate:null, weight0:null, tasks:{}, memo:'', video:{}, bnb:{}, teaBoard:{research:[],standard:[],package:[],promote:[]}, teaDaily:{}, teaNotes:'', finance:{}, schedule:BNB_TEMPLATES.duty.content, wine:{}, wineNotes:'', fit:{}, weights:{}, eng:{}, engSent:{}, review:{} }; }
+let S = loadState();
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+
+// ================= 工具 =================
+const $ = s => document.querySelector(s);
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('show'),1600); }
+function dk(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function todayKey(){ return dk(new Date()); }
+function yestKey(){ const d=new Date(); d.setDate(d.getDate()-1); return dk(d); }
+function tomorrowKey(){ const d=new Date(); d.setDate(d.getDate()+1); return dk(d); }
+function planDay(){ if(!S.startDate) return 1; const [y,m,dd]=S.startDate.split('-').map(Number); const st=new Date(y,m-1,dd); const n=new Date(); const cur=new Date(n.getFullYear(),n.getMonth(),n.getDate()); const diff=Math.round((cur-st)/86400000)+1; return Math.max(1,Math.min(28,diff)); }
+function dayNumOf(key){ if(!S.startDate) return null; const [y,m,dd]=key.split('-').map(Number); const cur=new Date(y,m-1,dd); const [sy,sm,sd]=S.startDate.split('-').map(Number); const st=new Date(sy,sm-1,sd); const diff=Math.round((cur-st)/86400000)+1; return (diff>=1&&diff<=28)?diff:null; }
+function wrapDay(n){ return ((n-1)%28)+1; }
+async function copyText(txt, btn){ try{ await navigator.clipboard.writeText(txt); }catch(e){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } if(btn){ const o=btn.textContent; btn.textContent='已复制✓'; setTimeout(()=>btn.textContent=o,1200);} else toast('已复制 ✓'); }
+
+// ================= 导航 =================
+const VIEWS = [
+  { g:'总览' },
+  { key:'dash', label:'今日总览', ic:'📋' },
+  { g:'业务板块' },
+  { key:'task', label:'日程·备忘', ic:'📅' },
+  { key:'video', label:'短视频日更', ic:'🎬' },
+  { key:'bnb', label:'民宿运营', ic:'🏡' },
+  { key:'wine', label:'米酒运营', ic:'🍶' },
+  { key:'tea', label:'擂茶产品', ic:'🍵', tag:'重点' },
+  { g:'个人成长' },
+  { key:'fit', label:'健身打卡', ic:'💪' },
+  { key:'eng', label:'碎片英语', ic:'📖' },
+  { key:'review', label:'每日复盘', ic:'📝' },
+  { key:'ip', label:'IP人设', ic:'✨' },
+];
+let curView = 'dash';
+function renderNav(){
+  const tNotDone = ((S.tasks[todayKey()]||[]).filter(t=>!t.done)).length + ((S.tasks[yestKey()]||[]).filter(t=>!t.done)).length;
+  $('#nav').innerHTML = VIEWS.map(v=>{
+    if(v.g) return `<div class="nav-group">${v.g}</div>`;
+    const badge = v.key==='task'&&tNotDone>0 ? `<span style="margin-left:auto;background:#e05c5c;color:#fff;font-size:10px;font-weight:700;border-radius:9px;padding:1px 7px;min-width:18px;text-align:center">${tNotDone}</span>` : '';
+    return `<button class="nav-item ${v.key===curView?'active':''}" onclick="go('${v.key}')"><span class="ic">${v.ic}</span>${v.label}${v.tag?`<span class="tag">${v.tag}</span>`:''}${badge}</button>`;
+  }).join('');
+}
+function go(k){ curView=k; renderNav(); renderTab(); $('#pageTitle').textContent = VIEWS.find(v=>v.key===k).label; $('#sidebar').classList.remove('open'); $('#overlay').classList.remove('show'); render(); window.scrollTo(0,0); }
+function toggleSide(){ $('#sidebar').classList.toggle('open'); $('#overlay').classList.toggle('show'); }
+
+// ================= 主渲染 =================
+function render(){
+  const pd = planDay(), tk = todayKey();
+  const maps = { dash:renderDash, task:renderTask, video:renderVideo, bnb:renderBnb, wine:renderWine, tea:renderTea, fit:renderFit, eng:renderEng, review:renderReview, ip:renderIp };
+  maps[curView](pd, tk);
+}
+
+// ================= ① 总览 =================
+function renderDash(pd, tk){
+  const V = VIDEO_THEMES[wrapDay(pd)-1], T = TEA_DAILY[wrapDay(pd)-1], E = ENG_DAILY[wrapDay(pd)-1], F = FIT_PLAN[wrapDay(pd)-1];
+  const yTasks = (S.tasks[yestKey()]||[]).filter(t=>!t.done);
+  const tTasks = (S.tasks[tk]||[]);
+  const wk = ['日','一','二','三','四','五','六']; const n = new Date();
+  const doneAll = (S.video[pd]?1:0)+(S.teaDaily[pd+'-0']?1:0)+(S.eng[pd]?1:0)+(S.fit[pd]?1:0);
+  const pct = Math.round(doneAll/4*100);
+  const c = 2*Math.PI*30;
+
+  // 今日优先级清单（自动）
+  let prList = [];
+  T.tasks.forEach((t,i)=>prList.push({ lv:'P0', cat:'擂茶产品', text:t, done:!!S.teaDaily[pd+'-'+i], act:`teaDailyToggle(${pd},${i})` }));
+  prList.push({ lv:'P0', cat:'短视频', text:`拍摄发布：《${V.theme}》（${V.biz}）`, done:!!S.video[pd], act:`videoToggle(${pd})` });
+  prList.push({ lv:'P1', cat:'民宿运营', text:'完成每日运营检查清单（8项）', done:(S.bnb[tk]||[]).length>=BNB_CHECKLIST.length, act:`go('bnb')` });
+  prList.push({ lv:'P1', cat:'个人生活', text:`健身：${F.type}（${F.min}分钟）`, done:!!S.fit[pd], act:`fitToggle(${pd})` });
+  prList.push({ lv:'P1', cat:'个人生活', text:`英语3句：${E.topic}`, done:!!S.eng[pd], act:`engToggle(${pd})` });
+  tTasks.forEach(t=>prList.push({ lv:t.level, cat:t.cat, text:t.text, done:t.done, act:`taskToggle('${t.id}','${tk}')` }));
+  const order = {P0:0,P1:1,P2:2};
+  prList.sort((a,b)=>order[a.lv]-order[b.lv] || (a.done?1:0)-(b.done?1:0));
+  const notDonePreview = prList.find(x=>!x.done)?.text.slice(0,40);
+
+  // 次日必做清单
+  const tmrKey = tomorrowKey(); const tmrN = wrapDay(pd+1);
+  const V2 = VIDEO_THEMES[tmrN-1], T2 = TEA_DAILY[tmrN-1];
+  let tmrList = [
+    { text:`短视频：《${V2.theme}》（${V2.biz}）· 建议上午完成拍摄`, cat:'短视频' },
+    ...T2.tasks.map(t=>({ text:t, cat:'擂茶产品' })),
+    { text:`健身：${FIT_PLAN[tmrN-1].type} · 英语：${ENG_DAILY[tmrN-1].topic}`, cat:'个人生活' },
+  ];
+  const tTmr = (S.tasks[tmrKey]||[]);
+  tTmr.forEach(t=>tmrList.push({ text:t.text, cat:t.cat }));
+  const doneCnt = prList.filter(x=>x.done).length;
+
+  $('#view').innerHTML = `
+  <div class="title-card">
+    <div class="ic-box">🌾</div>
+    <div class="t-info">
+      <h2>主理人今日工作台</h2>
+      <p>民宿运营 · 短视频日更 · 擂茶产品开发 · 自律成长</p>
+    </div>
+    <div class="t-tag">28天计划第 ${pd} 天</div>
+  </div>
+  <div class="quote-band">"扎根乡土，取舍通透，长期主义。把宁化的好东西，做给更多人看。"</div>
+
+  ${(prList.length-doneCnt)>0||yTasks.length?`
+  <div class="card" style="border:1.5px solid var(--danger);background:#fdf3f3;margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:22px">⏰</span>
+      <div style="flex:1;min-width:180px">
+        <div style="font-size:14px;font-weight:800;color:var(--danger)">今日还有 ${prList.length-doneCnt} 项工作未完成${yTasks.length?` · 另有遗留 ${yTasks.length} 项`:''}</div>
+        <div style="font-size:12px;color:#8a5555;margin-top:2px">${notDonePreview?`最要紧：${esc(notDonePreview)}`:'先完成 P0 项，再做 P1'} —— 晚上记得生成日报发给 AI 检查</div>
+      </div>
+      <button class="btn warn sm" onclick="genDailyReport()">📋 生成今日日报</button>
+    </div>
+  </div>`:''}
+  <div class="banner">
+    <div class="banner-top">
+      <div>
+        <div class="banner-hi">主理人，${n.getHours()<11?'早上好':n.getHours()<14?'中午好':n.getHours()<18?'下午好':'晚上好'} 🌾</div>
+        <div class="banner-quote">"扎根乡土，取舍通透，长期主义。<br>把宁化的好东西，做给更多人看。"</div>
+        <div class="banner-meta">${n.getFullYear()}年${n.getMonth()+1}月${n.getDate()}日 星期${wk[n.getDay()]} · 28天计划第 ${pd} 天</div>
+      </div>
+      <div class="ring-wrap">
+        <svg width="76" height="76" viewBox="0 0 76 76">
+          <circle cx="38" cy="38" r="30" stroke="rgba(255,255,255,.3)" stroke-width="7" fill="none"/>
+          <circle cx="38" cy="38" r="30" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-pct/100)}" transform="rotate(-90 38 38)"/>
+        </svg>
+        <div class="ring-num">${pct}%<small>今日</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-t"><span class="lft">🔥 今日优先级清单（自动生成）</span><span style="font-size:12px;color:var(--muted)">完成 ${doneCnt}/${prList.length}</span></div>
+    ${prList.map(p=>`
+      <div class="pr-item ${p.done?'done':''}">
+        <span class="pr-badge ${p.lv}">${p.lv}</span>
+        <span class="pr-text"><span class="tk-cat" style="background:${catColor(p.cat)};margin-right:6px">${p.cat}</span>${esc(p.text)}</span>
+        ${p.act.startsWith('go')?`<button class="btn ghost sm" onclick="${p.act}">去处理</button>`:`<div class="pr-check ${p.done?'on':''}" onclick="${p.act}">✓</div>`}
+      </div>`).join('')}
+    <div style="text-align:center;margin-top:10px"><button class="btn ghost sm" onclick="go('task')">＋ 添加自己的任务</button></div>
+  </div>
+
+  <div class="card">
+    <div class="card-t"><span class="lft">📅 次日必做推进清单（明日预告）</span>${yTasks.length?`<span style="font-size:11px;color:var(--danger)">今日遗留 ${yTasks.length} 项</span>`:''}</div>
+    ${yTasks.length?`<div style="margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:var(--danger);margin-bottom:6px">⚠ 今日遗留（建议顺延）</div>
+      ${yTasks.map(t=>`<div class="pr-item"><span class="pr-badge P0">遗留</span><span class="pr-text">${esc(t.text)}</span><button class="btn ghost sm" onclick="postpone('${t.id}')">顺延明天</button></div>`).join('')}
+    </div>`:''}
+    ${tmrList.map((t,i)=>`<div class="pr-item"><span class="tk-cat" style="background:${catColor(t.cat)}">${t.cat}</span><span class="pr-text">${esc(t.text)}</span></div>`).join('')}
+  </div>
+
+  <div class="card">
+    <div class="card-t"><span class="lft">📊 28天进度</span></div>
+    <div class="days-strip">${Array.from({length:28},(_,i)=>{ const d=i+1; const done=S.video[d]||S.eng[d]||S.fit[d]; return `<div class="d ${done?'done':''} ${d===pd?'cur':''}" title="第${d}天">${d}</div>`; }).join('')}</div>
+  </div>
+
+  <div class="card" style="border:1.5px solid var(--accent)">
+    <div class="card-t"><span class="lft">🔗 每日工作对接（数据 → AI 检查提醒）</span></div>
+    <div class="desc" style="line-height:1.8">每天晚上 <b>21:00</b> 手机闹钟会提醒你复盘。到时点下面的按钮，把今日工作数据生成日报复制，粘贴到 WorkBuddy 对话发送——AI 会 <b>①检查未完成项原因 ②提醒遗留工作 ③排出明日最重要的3件事</b>。</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn" onclick="genDailyReport()">📋 生成今日工作日报并复制</button>
+      <button class="btn ghost" onclick="genDailyReport(true)">👁 先预览日报内容</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-t"><span class="lft">⚡ 万能指令（点击复制，发给AI使用）</span></div>
+    <div class="cmd-grid">${CMDS.map((c,i)=>`<button class="cmd-btn" onclick="copyText(CMDS[${i}].full)"><div class="t">${c.t}</div><div class="s">${c.s}</div></button>`).join('')}</div>
+  </div>`;
+}
+
+// ================= 每日工作日报（发给AI对接） =================
+function genDailyReport(preview){
+  const pd=planDay(), tk=todayKey();
+  const V=VIDEO_THEMES[wrapDay(pd)-1], T=TEA_DAILY[wrapDay(pd)-1], E=ENG_DAILY[wrapDay(pd)-1], F=FIT_PLAN[wrapDay(pd)-1];
+  let items=[];
+  T.tasks.forEach((t,i)=>items.push({text:`擂茶：${t}`, done:!!S.teaDaily[pd+'-'+i]}));
+  items.push({text:`短视频：《${V.theme}》(${V.biz})`, done:!!S.video[pd]});
+  items.push({text:`健身：${F.type}（${F.min}分钟）`, done:!!S.fit[pd]});
+  items.push({text:`英语3句：${E.topic}`, done:!!S.eng[pd]});
+  items.push({text:`民宿清单（8项）`, done:(S.bnb[tk]||[]).length>=BNB_CHECKLIST.length});
+  (S.tasks[tk]||[]).forEach(t=>items.push({text:`${t.cat}：${t.text}`, done:t.done}));
+  const done=items.filter(x=>x.done), notDone=items.filter(x=>!x.done);
+  const left=[];
+  Object.keys(S.tasks).forEach(k=>{ if(k<tk) (S.tasks[k]||[]).forEach(t=>{ if(!t.done) left.push(`${k.slice(5).replace('-','/')} ${t.text}`); }); });
+  const tmrKey=tomorrowKey(); const tmrN=wrapDay(pd+1); const T2=TEA_DAILY[tmrN-1];
+  const tmrTop=[`短视频：《${VIDEO_THEMES[tmrN-1].theme}》`, ...T2.tasks.slice(0,2), ...(S.tasks[tmrKey]||[]).map(t=>t.text)];
+  const w=S.weights[pd];
+  const txt=
+`【观粟工作台日报 ${tk} · 28天计划第${pd}天】
+
+✅ 今日完成（${done.length}项）：
+${done.map(x=>'· '+x.text).join('\n')||'· 无'}
+
+❌ 今日未完成（${notDone.length}项）：
+${notDone.map(x=>'· '+x.text).join('\n')||'· 无，今天全清 🎉'}
+
+${left.length?`📦 历史遗留（${left.length}项，需要顺延）：
+${left.map(x=>'· '+x).join('\n')}
+
+`:''}——
+📊 民宿清单：${(S.bnb[tk]||[]).length}/8${w?` · 当前体重：${w}斤（目标116）`:''}
+
+🎯 明日重点预告：
+${tmrTop.slice(0,5).map(x=>'· '+x).join('\n')}
+
+——
+请帮我：① 检查未完成项的原因和补救 ② 提醒我明早优先处理什么 ③ 把遗留任务排出顺延计划`;
+  if(preview){ $('#view').insertAdjacentHTML('afterbegin', `<div class="card" style="border:1.5px solid var(--border)"><div class="card-t"><span class="lft">👁 日报预览（复制后粘贴到 WorkBuddy 对话）</span><button class="btn ghost sm" onclick="this.closest('.card').remove()">关闭</button></div><pre style="white-space:pre-wrap;font-size:12px;line-height:1.8;color:var(--text);font-family:inherit;margin:0">${esc(txt)}</pre></div>`); window.scrollTo(0,0); return; }
+  copyText(txt);
+  toast('日报已复制 → 去 WorkBuddy 对话粘贴发送');
+}
+const CMDS = [
+  { t:'1️⃣ 生成今天全部待办', s:'四大类完整清单', full:'我是宁化谷物艺术中心（观粟民宿）主理人，业务含：民宿运营、短视频日更、客家擂茶伴手礼开发、自酿米酒。请生成我今天全部待办清单，按民宿工作/短视频/擂茶产品/个人生活（健身英语）分类，条理清晰、可执行、有优先级。' },
+  { t:'2️⃣ 今日短视频主题+口播', s:'主题/脚本/朋友圈文案', full:'我是宁化观粟民宿主理人，请给我今天一条民宿短视频方案：主题+拍摄内容+口播脚本+朋友圈文案。元素贴合：稻田、咖啡、自酿米酒、客家擂茶、乡野治愈、雨天民宿、主理人成长、取舍人生。风格：真诚、扎根乡土、长期主义。' },
+  { t:'3️⃣ 擂茶品牌今日推进', s:'3件可落地小事', full:'我是宁化人，正在做一个独立手工擂茶品牌（与民宿业务完全独立切割），只做宁化正宗手工擂茶，核心客群是全国在外打拼的宁化人（思乡味觉刚需）+客家美食爱好者+养生茶饮消费者。品牌四阶段：①定型期（品牌名/slogan/配方/SOP）②包装落地期（设计/打样/量产）③上架引流期（生产/朋友圈矩阵/老乡群种草）④稳定运营期（发货/售后/裂变）。请给我今日3件不宏大、可落地、看得见进度的小事，并注明属于哪个阶段。' },
+  { t:'4️⃣ 擂茶乡愁文案包', s:'包装/产品故事', full:'请帮我写宁化独立手工擂茶品牌的文案包。品牌定位：全新独立食品伴手礼品牌，只做宁化正宗手工擂茶，不挂靠任何民宿业务。卖点：纯手工古法捶打、无香精无添加、真空锁鲜可全国邮寄、针对外地游子优化（耐储存+冲泡简单）。目标人群：在外打拼的宁化人（乡愁刚需）。输出：①品牌slogan备选3条（参考调性：正宗、地道、乡土、匠心、思乡、健康）②礼盒外盒文案（50字内）③产品简介（100字）④溯源卡故事（150字，讲宁化客家擂茶）⑤朋友圈乡愁文案（治愈风，"身在他乡，喝回宁化"主题）。' },
+  { t:'5️⃣ 健身+英语打卡', s:'今日两项', full:'给我今日健身打卡内容（居家轻运动、懒人可坚持、10-20分钟）和每日3-5句碎片英语（生活口语+民宿接待场景），轻松不压力，附体态管理提醒。' },
+  { t:'6️⃣ 今日复盘+明日重点', s:'晚间总结', full:'帮我做今日复盘并生成明天重点工作。维度：今日完成、今日遗留、明日重点（最多3件）、擂茶独立品牌进度（生产/包装/推广/订单）、民宿运营复盘、个人成长。我是宁化观粟民宿主理人+擂茶独立品牌创始人，风格务实不鸡汤。今天的情况是：【在此填写今日情况】' },
+  { t:'7️⃣ 节日/节气营销内容', s:'三段式发文模板', full:'为宁化观粟民宿主理人做一个【节日/节气】营销内容方案。模板：①内容侧重点（结合业务：民宿/擂茶/米酒/咖啡）②发布阶段（预热期/爆发期/实况期，每天日期明确）③最佳发布时间+频率④话题标签（6-8个含本地+节日+小众旅行）⑤转化钩子（用真实福利，不要套路）⑥成功关键一句话总结。当前节日/节气是：【在此填入，如：教师节、中秋、国庆、白露、秋分】' },
+  { t:'8️⃣ 乡愁短视频脚本', s:'擂茶三大内容方向', full:'请为宁化独立手工擂茶品牌写一条短视频脚本。三大固定内容方向任选其一：①乡愁情感向（在外漂泊的宁化人，最想念的一口家乡擂茶）②工艺匠心向（纯手工捶打全过程，区别机器量产）③实用教程向（外地人怎么泡正宗宁化擂茶）。要求：30-60秒，开头3秒强钩子，结尾引导"把宁化味道寄到全国各地"。平台：抖音/视频号/小红书，带话题 #宁化擂茶 #家乡味道 #在外宁化人。方向选择：【填①②③】' },
+];
+
+// ================= ② 日程·备忘 =================
+let addCat = '';
+function renderTask(pd, tk){
+  const yk = yestKey(); const tmk = tomorrowKey();
+  const yTasks = (S.tasks[yk]||[]).filter(t=>!t.done);
+  const allOld = [];
+  Object.keys(S.tasks).forEach(k=>{ if(k<tk) (S.tasks[k]||[]).forEach(t=>{ if(!t.done) allOld.push({...t,_k:k}); }); });
+  const tT = S.tasks[tk]||[], tTm = S.tasks[tmk]||[], tF = [];
+  Object.keys(S.tasks).forEach(k=>{ if(k>tmk) (S.tasks[k]||[]).forEach(t=>tF.push({...t,_k:k})); });
+
+  const group = (title, arr, k) => `
+    <div class="date-group-t">${title}<span class="cnt">${arr.length} 项</span></div>
+    ${arr.length?arr.map(t=>`
+      <div class="task-item ${t.done?'done':''}">
+        <div class="pr-check ${t.done?'on':''}" onclick="taskToggle('${t.id}','${k||t._k}')">✓</div>
+        <div style="flex:1">
+          <div class="tk-text">${esc(t.text)}</div>
+          <div class="tk-meta"><span class="tk-cat" style="background:${catColor(t.cat)}">${t.cat}</span> <span class="pr-badge ${t.level}" style="margin-left:4px">${t.level}</span>${t._k?` <span style="margin-left:4px">${t._k.slice(5).replace('-','/')}</span>`:''}</div>
+        </div>
+        <button class="btn ghost sm" onclick="postpone('${t.id}','${k||t._k}')">顺延</button>
+      </div>`).join(''):'<div class="desc" style="padding:6px 4px">暂无任务</div>'}`;
+
+  $('#view').innerHTML = `
+  <div class="title-card">
+    <div class="ic-box">📅</div>
+    <div class="t-info">
+      <h2>日程 · 备忘</h2>
+      <p>口述即录入 · 自动归类 · 遗留自动顺延 · 次日必做清单</p>
+    </div>
+    <div class="t-tag">${tT.length+tTm.length} 项待办</div>
+  </div>
+  <div class="quote-band">📌 昨天没做完的不用慌：点「顺延」自动挪到明天；明天要做的事，提前一天列好，早上起来直接执行。</div>
+  <div class="card">
+    <div class="card-t"><span class="lft">➕ 新增任务 / 备忘</span></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input type="text" id="ntText" style="flex:1;min-width:200px" placeholder="口述一件事，如：明天拍擂茶包装打样、采购芝麻5斤、修二楼花洒…" onkeydown="if(event.key==='Enter')addTask()">
+      <select id="ntLevel"><option value="P0">P0 紧急</option><option value="P1" selected>P1 重要</option><option value="P2">P2 一般</option></select>
+      <select id="ntCat"><option value="">自动分类</option><option value="民宿运营">民宿运营</option><option value="短视频">短视频</option><option value="擂茶产品">擂茶产品</option><option value="米酒运营">米酒运营</option><option value="个人生活">个人生活</option></select>
+      <select id="ntDate"><option value="today" selected>今天</option><option value="tomorrow">明天</option><option value="future">以后</option></select>
+      <button class="btn" onclick="addTask()">添加</button>
+    </div>
+    <div class="desc" style="margin-top:8px">输入内容含"擂茶/拍/房间/米酒/健身"等关键词会<b>自动归类</b>对应模块</div>
+  </div>
+
+  ${allOld.length||yTasks.length?`<div class="card" style="border:1px solid #f5c6c6">${group('⚠️ 遗留未完成（点击顺延到明天）', allOld.length?allOld:yTasks, '')}</div>`:''}
+  <div class="card">${group('📌 今天', tT, tk)}${group('🔜 明天（次日必做）', tTm, tmk)}${group('🗂️ 以后', tF, '')}</div>
+
+  <div class="card">
+    <div class="card-t"><span class="lft">📝 备忘录（随手记 · 自动保存）</span></div>
+    <textarea id="memoBox" rows="6" placeholder="采购：芝麻5斤、牛皮纸袋…&#10;对接：文旅局小林、印刷厂老王…&#10;维修：二楼花洒、咖啡机除垢…" oninput="saveMemo(this.value)">${esc(S.memo)}</textarea>
+  </div>`;
+}
+function saveMemo(v){ S.memo = v; save(); }
+function addTask(){
+  const text = $('#ntText').value.trim(); if(!text) return toast('请输入内容');
+  const level = $('#ntLevel').value;
+  const catSel = $('#ntCat').value;
+  const cat = catSel || autoCat(text);
+  const dsel = $('#ntDate').value;
+  const k = dsel==='today'?todayKey():dsel==='tomorrow'?tomorrowKey():'2999-12-31';
+  if(!S.tasks[k]) S.tasks[k]=[];
+  S.tasks[k].push({ id:'t'+Date.now(), text, cat, level, done:false });
+  save(); toast(`已归类「${cat}」✓`); render();
+}
+function taskToggle(id, k){
+  const t=(S.tasks[k]||[]).find(x=>x.id===id); if(!t) return; t.done=!t.done; save(); render();
+}
+function postpone(id, k){
+  const k2 = k || Object.keys(S.tasks).find(key=>(S.tasks[key]||[]).some(x=>x.id===id));
+  const t=(S.tasks[k2]||[]).find(x=>x.id===id); if(!t) return;
+  const tk=tomorrowKey(); if(!S.tasks[tk]) S.tasks[tk]=[];
+  S.tasks[tk].push(t); S.tasks[k2]=S.tasks[k2].filter(x=>x.id!==id);
+  save(); toast('已顺延到明天 ✓'); render();
+}
+
+// ================= ③ 短视频 =================
+let vFilter='全部'; let vOpen=null;
+function renderVideo(pd, tk){
+  const bizs=['全部','乡野治愈','雨天民宿','主理人成长','取舍人生','自酿米酒','擂茶制作','非遗文化','伴手礼','产品推广'];
+  const list=VIDEO_THEMES.filter(v=>vFilter==='全部'||v.biz===vFilter);
+  const d=wrapDay(pd);
+  $('#view').innerHTML=`
+  <div class="title-card">
+    <div class="ic-box">🎬</div>
+    <div class="t-info">
+      <h2>短视频日更</h2>
+      <p>稻田 · 咖啡 · 自酿米酒 · 客家擂茶 · 乡野治愈 · 主理人成长</p>
+    </div>
+    <div class="t-tag">第${d}天/28</div>
+  </div>
+  <div class="quote-band">📌 文案分三种：正式汇报版 / 日常工作版 / 朋友圈治愈版。每条视频点击展开一键复制。</div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🎬 每日一更 · 28天主题循环</span><span style="font-size:12px;color:var(--muted)">已发 ${Object.keys(S.video).length}/28</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">${bizs.map(b=>`<button class="btn ${b===vFilter?'':'ghost'} sm" onclick="setVF('${b}')">${b}</button>`).join('')}</div>
+    <div class="video-grid">${list.map(v=>`
+      <div class="vcard ${v.day===d?'cur':''}" onclick="vOpen=vOpen===${v.day}?null:${v.day};render()">
+        <div class="vcard-head"><div class="vday ${S.video[v.day]?'done':''}">${S.video[v.day]?'✓':v.day}</div><span class="vbiz">${v.biz}</span></div>
+        <div class="vtitle">${esc(v.theme)}${v.day===d?' <span style="color:var(--c-video);font-size:11px">·今天</span>':''}</div>
+        <div class="vshot">📷 ${esc(v.shot)}</div>
+        ${vOpen===v.day?`
+        <div class="vdetail">
+          <div class="vblock"><div class="lb">🎙️ 口播脚本</div><div class="tx">${esc(v.script)}</div><button class="copy-btn" onclick="event.stopPropagation();copyText(VIDEO_THEMES[${v.day-1}].script,this)">复制</button></div>
+          <div class="vblock"><div class="lb">💬 朋友圈文案</div><div class="tx">${esc(v.moments)}</div><button class="copy-btn" onclick="event.stopPropagation();copyText(VIDEO_THEMES[${v.day-1}].moments,this)">复制</button></div>
+          <div style="text-align:center;margin-top:8px"><button class="btn ${S.video[v.day]?'':'ghost'} sm" onclick="event.stopPropagation();videoToggle(${v.day})">${S.video[v.day]?'已发布✓':'标记已发'}</button></div>
+        </div>`:''}
+      </div>`).join('')}</div>
+  </div>`;
+}
+function setVF(b){ vFilter=b; render(); }
+function videoToggle(d){ if(S.video[d]) delete S.video[d]; else S.video[d]=true; save(); render(); }
+
+// ================= ④ 民宿运营 =================
+function renderBnb(pd, tk){
+  const checked = S.bnb[tk]||[];
+  const fins = S.finance[tk]||[];
+  const inT = fins.filter(f=>f.type==='in').reduce((a,b)=>a+b.amount,0);
+  const outT = fins.filter(f=>f.type==='out').reduce((a,b)=>a+b.amount,0);
+  $('#view').innerHTML=`
+  <div class="title-card">
+    <div class="ic-box">🏡</div>
+    <div class="t-info">
+      <h2>民宿运营</h2>
+      <p>一楼咖啡 · 二楼住宿 · 检查清单 · 收支记账 · 排班 · 迎检材料</p>
+    </div>
+    <div class="t-tag">清单 ${checked.length}/8</div>
+  </div>
+  <div class="quote-band">💰 今日净额 ¥${inT-outT}（收入 ¥${inT} − 支出 ¥${outT}）。日终记得复制财务日报模板发到财务群。</div>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-n">${checked.length}<small>/8</small></div><div class="stat-l">今日检查清单</div></div>
+    <div class="stat-card"><div class="stat-n in" style="color:var(--accent)">¥${inT}</div><div class="stat-l">今日收入</div></div>
+    <div class="stat-card"><div class="stat-n" style="color:#e05c5c">¥${outT}</div><div class="stat-l">今日支出</div></div>
+    <div class="stat-card"><div class="stat-n">¥${inT-outT}</div><div class="stat-l">今日净额</div></div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">✅ 每日运营检查清单</span><button class="btn ghost sm" onclick="bnbAll()">全部完成</button></div>
+    ${BNB_CHECKLIST.map((c,i)=>`<div class="chk ${checked.includes(i)?'on':''}" onclick="bnbToggle(${i})"><div class="box">✓</div><div class="tx">${esc(c)}</div></div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">💰 今日收支记录</span></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <select id="finType"><option value="in">收入</option><option value="out">支出</option></select>
+      <input type="number" id="finAmt" placeholder="金额" style="width:100px">
+      <input type="text" id="finNote" placeholder="事项（房费/咖啡/采购…）" style="flex:1;min-width:160px">
+      <button class="btn sm" onclick="addFin()">记一笔</button>
+    </div>
+    ${fins.map((f,i)=>`<div class="fin-row"><span class="fin-type ${f.type==='in'?'fin-in':'fin-out'}">${f.type==='in'?'收入':'支出'}</span><span style="flex:1">${esc(f.note)}</span><span class="fin-amt ${f.type==='in'?'in':'out'}">${f.type==='in'?'+':'-'}¥${f.amount}</span><button class="btn ghost sm" onclick="delFin(${i})">删</button></div>`).join('')||'<div class="desc">暂无记录</div>'}
+    <div class="desc" style="margin-top:8px">日终可复制到财务群 → <button class="btn ghost sm" onclick="copyText(BNB_TEMPLATES.finance.content)">财务群日报模板</button></div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">📄 标准化模板库（点击复制）</span></div>
+    ${Object.values(BNB_TEMPLATES).map((t,i)=>{ const key=Object.keys(BNB_TEMPLATES)[i]; return `
+    <div class="vblock"><div class="lb">${esc(t.title)}</div><div class="tx" style="white-space:pre-wrap;max-height:100px;overflow:auto">${esc(t.content)}</div><button class="copy-btn" onclick="copyText(BNB_TEMPLATES['${key}'].content,this)">复制</button></div>`; }).join('')}
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">👥 本周排班（可编辑 · 自动保存）</span></div>
+    <textarea id="schedBox" rows="9" oninput="S.schedule=this.value;save()">${esc(S.schedule)}</textarea>
+  </div>`;
+}
+function bnbToggle(i){ const k=todayKey(); const c=S.bnb[k]||[]; const idx=c.indexOf(i); if(idx>=0)c.splice(idx,1); else c.push(i); S.bnb[k]=c; save(); render(); }
+function bnbAll(){ S.bnb[todayKey()]=[0,1,2,3,4,5,6,7]; save(); toast('今日清单全部完成 ✓'); render(); }
+function addFin(){
+  const type=$('#finType').value, amount=parseFloat($('#finAmt').value), note=$('#finNote').value.trim();
+  if(!amount||!note) return toast('请填写金额和事项');
+  const k=todayKey(); if(!S.finance[k])S.finance[k]=[]; S.finance[k].push({type,amount,note}); save(); render();
+}
+function delFin(i){ const k=todayKey(); S.finance[k].splice(i,1); save(); render(); }
+
+// ================= ⑤ 米酒运营 =================
+function renderWine(pd, tk){
+  const wk = WINE_CONTENT;
+  $('#view').innerHTML=`
+  <div class="title-card">
+    <div class="ic-box">🍶</div>
+    <div class="t-info">
+      <h2>米酒运营</h2>
+      <p>自酿米酒 · 日常清单 · 品鉴活动 · 销售话术 · 短视频选题</p>
+    </div>
+    <div class="t-tag">${(S.wine[tk]||[]).length}/${wk.daily.length} 完成</div>
+  </div>
+  <div class="quote-band">🍶 米酒是客源的"记忆点"：住过的客人带一坛走，回家喝的时候想起观粟——这就是复购的起点。</div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🍶 米酒日常运营清单</span><button class="btn ghost sm" onclick="wineAll()">全部完成</button></div>
+    ${wk.daily.map((c,i)=>`<div class="chk ${((S.wine[tk]||[]).includes(i)?'on':'')}" onclick="wineToggle(${i})"><div class="box">✓</div><div class="tx">${esc(c)}</div></div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🎉 品鉴活动策划模板</span></div>
+    <div class="vblock"><div class="tx" style="white-space:pre-wrap">${esc(wk.tasting.content)}</div><button class="copy-btn" onclick="copyText(WINE_CONTENT.tasting.content,this)">复制</button></div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">💬 销售话术库</span></div>
+    ${wk.scripts.map((s,i)=>`<div class="vblock"><div class="lb">${esc(s.title)}</div><div class="tx">${esc(s.content)}</div><button class="copy-btn" onclick="copyText(WINE_CONTENT.scripts[${i}].content,this)">复制</button></div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🎬 米酒短视频选题（8个）</span></div>
+    <div class="kw-chips">${wk.topics.map(t=>`<span class="kw" style="cursor:default">${esc(t)}</span>`).join('')}</div>
+    <div class="desc" style="margin-top:10px">搭配短视频模块第2周主题（第8-14天）使用效果更佳 <button class="btn ghost sm" onclick="go('video')">去短视频模块 →</button></div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">📝 米酒备忘（库存/批次 · 自动保存）</span></div>
+    <textarea rows="5" oninput="S.wineNotes=this.value;save()" placeholder="第3批 2026-08-20 开缸 ×12坛&#10;一年陈剩8坛…">${esc(S.wineNotes)}</textarea>
+  </div>`;
+}
+function wineToggle(i){ const k=todayKey(); const c=S.wine[k]||[]; const idx=c.indexOf(i); if(idx>=0)c.splice(idx,1); else c.push(i); S.wine[k]=c; save(); render(); }
+function wineAll(){ S.wine[todayKey()]=[0,1,2,3,4,5]; save(); toast('米酒清单全部完成 ✓'); render(); }
+
+// ================= ⑥ 擂茶独立品牌（重点·与民宿独立） =================
+function renderTea(pd, tk){
+  const d = wrapDay(pd); const T = TEA_DAILY[d-1];
+  const bd = TEA_BOARD;
+  const doneCnt = T.tasks.filter((_,i)=>S.teaDaily[d+'-'+i]).length;
+  const boardPct = key => { const total=bd[key].tasks.length; const done=(S.teaBoard[key]||[]).length; return {done,total,pct:Math.round(done/total*100)}; };
+  const allKeys=['develop','process','package','order'];
+  const totalDone = allKeys.reduce((a,k)=>a+boardPct(k).done,0), totalAll = allKeys.reduce((a,k)=>a+boardPct(k).total,0);
+  const phase = d<=7?'新品研发（第1周：配方试验→定稿）':d<=14?'工艺与样品（第2周：SOP→稳定样品）':d<=21?'包装设计（第3周：设计稿→打样）':'订包装投产（第4周：下单→生产）';
+
+  $('#view').innerHTML=`
+  <div class="title-card" style="border:1.5px solid var(--c-tea)">
+    <div class="ic-box">🍵</div>
+    <div class="t-info">
+      <h2>擂茶独立品牌 <span style="font-size:11px;background:var(--c-tea);color:#fff;padding:2px 8px;border-radius:8px;vertical-align:2px;margin-left:4px">重点</span></h2>
+      <p>全新独立品牌 · 只做宁化正宗手工擂茶 · 主攻全国在外宁化人</p>
+    </div>
+    <div class="t-tag" style="background:var(--c-tea)">第${d}天 · ${doneCnt}/3</div>
+  </div>
+  <div class="quote-band" style="background:#edf2e4;color:#4a5d33">🔬 主线：新品研发 → 工艺与样品 → 包装设计 → 订包装投产，一条线走到底。当前阶段：${phase}。总看板 ${totalDone}/${totalAll} 项（${Math.round(totalDone/totalAll*100)}%）。</div>
+  <div class="banner" style="background:linear-gradient(135deg,#5c7a3f,#7d9d54)">
+    <div class="banner-top"><div>
+      <div class="banner-hi">🍵 今日擂茶推进 · ${doneCnt}/3 完成</div>
+      <div class="banner-quote">纯手工古法捶打 · 无香精无添加 · 真空锁鲜可邮寄<br>核心客群：在外打拼的宁化人 · 客家美食爱好者 · 养生茶饮消费者</div>
+    </div></div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🔥 今日3件小事（第${d}天 · 不宏大、可落地）</span></div>
+    ${T.tasks.map((t,i)=>`<div class="chk ${S.teaDaily[d+'-'+i]?'on':''}" onclick="teaDailyToggle(${d},${i})"><div class="box">✓</div><div class="tx">${esc(t)}</div></div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">📋 品牌落地看板（四阶段全流程）</span></div>
+    <div class="kb-grid">
+      ${allKeys.map(k=>{ const p=boardPct(k); return `
+      <div class="kb-card">
+        <div class="kb-t">${bd[k].title}<span class="kb-pct">${p.done}/${p.total}</span></div>
+        <div style="height:6px;background:#eef2ef;border-radius:3px;margin-bottom:10px"><div style="height:100%;background:var(--c-tea);border-radius:3px;width:${p.pct}%"></div></div>
+        ${bd[k].tasks.map((t,i)=>`<div class="chk ${((S.teaBoard[k]||[]).includes(i)?'on':'')}" onclick="teaBoardToggle('${k}',${i})" style="padding:8px 10px;font-size:12px"><div class="box" style="width:17px;height:17px;font-size:10px">✓</div><div class="tx">${esc(t)}</div></div>`).join('')}
+      </div>`; }).join('')}
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">💰 三大规格定价（引流款/复购款/送礼款）</span></div>
+    <div class="price-grid">${bd.pricing.items.map(p=>`<div class="price-card"><div class="price-name">${esc(p.name)}</div><div class="price-num">${esc(p.price)}</div><div class="price-desc">${esc(p.desc)}</div></div>`).join('')}</div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🧪 配方试验记录（自动保存）</span><button class="btn ghost sm" onclick="copyText(S.teaNotes||'（记录为空）')">复制记录</button></div>
+    <textarea rows="6" oninput="S.teaNotes=this.value;save()" placeholder="配比试验：青草Xg/茶叶Xg/芝麻Xg/花生Xg · 偏咸&#10;捶打时长：XX分钟 · 颗粒度对比&#10;消杀温度：XX℃ · 保质期测试（常温/冷冻）…">${esc(S.teaNotes)}</textarea>
+  </div>`;
+}
+function teaDailyToggle(d,i){ const k=d+'-'+i; if(S.teaDaily[k]) delete S.teaDaily[k]; else S.teaDaily[k]=true; save(); render(); }
+function teaBoardToggle(k,i){ const c=S.teaBoard[k]||[]; const idx=c.indexOf(i); if(idx>=0)c.splice(idx,1); else c.push(i); S.teaBoard[k]=c; save(); render(); }
+
+// ================= ⑦ 健身 =================
+function renderFit(pd, tk){
+  const d=wrapDay(pd); const F=FIT_PLAN[d-1];
+  let streak=0; for(let i=planDay();i>=1;i--){ if(S.fit[i])streak++; else if(i!==planDay())break; }
+  const wKeys=Object.keys(S.weights).map(Number).sort((a,b)=>a-b).map(k=>({d:k,w:S.weights[k]}));
+  const latest=wKeys.length?wKeys[wKeys.length-1].w:(S.weight0||null);
+  const wkly=[1,7,14,21,28];
+  $('#view').innerHTML=`
+  <div class="title-card">
+    <div class="ic-box">💪</div>
+    <div class="t-info">
+      <h2>健身打卡</h2>
+      <p>懒人可坚持 · 每天10-50分钟 · 做总比不做好</p>
+    </div>
+    <div class="t-tag">🔥 连续${streak}天</div>
+  </div>
+  <div class="quote-band">⚖️ 目标 ${S.weight0||122} → 116 斤，${latest?`当前 ${latest} 斤`:'记录今日体重后显示'}。平台期别慌：稳住饮食 + 保持打卡，体重会继续往下走。</div>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-n">${Object.keys(S.fit).length}<small>/28</small></div><div class="stat-l">累计打卡</div></div>
+    <div class="stat-card"><div class="stat-n">🔥${streak}</div><div class="stat-l">连续天数</div></div>
+    <div class="stat-card"><div class="stat-n">${latest?latest:'--'}<small>斤</small></div><div class="stat-l">当前体重</div></div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">💪 今日运动（第${d}天 · ${F.type}）</span><button class="btn ${S.fit[d]?'':'ghost'} sm" onclick="fitToggle(${d})">${S.fit[d]?'已打卡✓':'完成打卡'}</button></div>
+    <div class="desc" style="font-size:15px;color:var(--text);font-weight:600">${esc(F.content)}</div>
+    <div class="desc" style="margin-top:6px">⏱️ 约${F.min}分钟 · 懒人可坚持，做总比不做好</div>
+    <div class="tip" style="font-size:12px;background:#fff8e1;border-left:3px solid var(--warn);padding:8px 12px;border-radius:4px;margin-top:10px">💡 体态提醒：久坐1小时起来活动2分钟；每天靠墙站立5分钟（后脑勺/肩胛/臀/小腿/脚跟贴墙）</div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">⚖️ 体重记录</span></div>
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <input type="number" step="0.1" id="wIn" placeholder="记录今日体重（斤）" style="flex:1">
+      <button class="btn sm" onclick="saveW()">记录</button>
+    </div>
+    <canvas id="wChart" style="width:100%;height:170px"></canvas>
+    <div class="path" style="margin-top:12px">${FIT_PLAN.map(f=>`<div class="p ${S.fit[f.day]?'done':''} ${f.day===d?'cur':''}" title="${esc(f.type)}" onclick="fitJump(${f.day})">${f.day}</div>`).join('')}</div>
+  </div>`;
+  requestAnimationFrame(drawW);
+}
+function fitToggle(d){ if(S.fit[d]) delete S.fit[d]; else S.fit[d]=true; save(); render(); }
+function fitJump(){ toast('按日期顺序推进即可，无需跳转'); }
+function saveW(){ const v=parseFloat($('#wIn').value); if(!v||v<80||v>250) return toast('请输入合理体重'); const k=prompt('记录到第几天？（默认今天第'+planDay()+'天）',''); const d=parseInt(k)||planDay(); S.weights[d]=v; save(); toast('体重已记录 ✓'); render(); }
+function drawW(){
+  const cv=$('#wChart'); if(!cv) return;
+  const w=cv.clientWidth||600,h=170,dpr=window.devicePixelRatio||1;
+  cv.width=w*dpr; cv.height=h*dpr;
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+  const ws=Object.keys(S.weights).map(Number).sort((a,b)=>a-b).map(k=>({d:k,w:S.weights[k]}));
+  const vals=[...ws.map(x=>x.w), ...(S.weight0?[S.weight0]:[]), 116];
+  let mn=Math.min(...vals)-1, mx=Math.max(...vals)+1; if(mx-mn<6){mx=mn+6;}
+  const padL=36,padR=10,padT=12,padB=20;
+  const X=d2=>padL+(d2-1)/27*(w-padL-padR), Y=v=>padT+(mx-v)/(mx-mn)*(h-padT-padB);
+  ctx.font='10px sans-serif'; ctx.textAlign='right';
+  for(let g=Math.ceil(mn);g<=Math.floor(mx);g++){ ctx.strokeStyle='#eef2ef'; ctx.beginPath(); ctx.moveTo(padL,Y(g)); ctx.lineTo(w-padR,Y(g)); ctx.stroke(); ctx.fillStyle='#adb8b0'; ctx.fillText(g,padL-4,Y(g)+3); }
+  ctx.strokeStyle='#f0a500'; ctx.setLineDash([5,4]); ctx.beginPath(); ctx.moveTo(padL,Y(116)); ctx.lineTo(w-padR,Y(116)); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#f0a500'; ctx.textAlign='left'; ctx.fillText('目标116',padL+2,Y(116)-4);
+  ctx.fillStyle='#adb8b0'; ctx.textAlign='center'; [1,7,14,21,28].forEach(d2=>ctx.fillText('D'+d2,X(d2),h-6));
+  if(!ws.length) return;
+  ctx.strokeStyle='#4caf7f'; ctx.lineWidth=2.5; ctx.beginPath();
+  ws.forEach((e,i)=>{ const x=X(e.d),y=Y(e.w); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.stroke();
+  ws.forEach(e=>{ ctx.beginPath(); ctx.arc(X(e.d),Y(e.w),3.5,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#4caf7f'; ctx.lineWidth=2; ctx.stroke(); });
+}
+
+// ================= ⑧ 英语 =================
+function renderEng(pd, tk){
+  const d=wrapDay(pd); const E=ENG_DAILY[d-1];
+  const known=S.engSent[d]||[];
+  const wk=Math.ceil(d/7); const phaseMap={1:'基础生存口语',2:'民宿接待场景',3:'产品介绍（咖啡/米酒/擂茶）',4:'销售与送客'};
+  $('#view').innerHTML=`
+  <div class="title-card">
+    <div class="ic-box">📖</div>
+    <div class="t-info">
+      <h2>碎片英语</h2>
+      <p>零基础起步 · 每天3句 · 28天能开口接待外国客人</p>
+    </div>
+    <div class="t-tag">第${wk}周 · ${d}/28天</div>
+  </div>
+  <div class="quote-band">💬 学习路径：第1周基础生存 → 第2周民宿接待 → 第3周产品介绍（咖啡/米酒/擂茶）→ 第4周销售送客。今天主题：${esc(E.topic)}。</div>
+  <div class="banner" style="background:linear-gradient(135deg,#4a7fb5,#5a9fd4)">
+    <div class="banner-top"><div>
+      <div class="banner-hi">📖 第${wk}周 · ${phaseMap[wk]}</div>
+      <div class="banner-quote">每天3句，碎片记忆，轻松不压力。<br>今日主题：${esc(E.topic)}</div>
+    </div></div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">💬 今日3句</span><button class="btn ${S.eng[d]?'':'ghost'} sm" onclick="engToggle(${d})">${S.eng[d]?'已打卡✓':'完成打卡'}</button></div>
+    ${E.sents.map((s,i)=>`<div class="sent-card"><div class="sent-en">${esc(s)}</div><button class="sent-btn ${known.includes(i)?'on':''}" onclick="sentToggle(${d},${i})">${known.includes(i)?'记住了✓':'记住了'}</button></div>`).join('')}
+    <div class="desc" style="margin-top:6px">先大声读3遍 → 点"记住了" → 明天在民宿真实场景里用1句</div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🗺️ 28天学习路径</span><span style="font-size:12px;color:var(--muted)">已学 ${Object.keys(S.eng).length}/28</span></div>
+    <div class="path">${ENG_DAILY.map(e=>`<div class="p ${S.eng[e.day]?'done':''} ${e.day===d?'cur':''}" title="${esc(e.topic)}">${e.day}</div>`).join('')}</div>
+  </div>`;
+}
+function engToggle(d){ if(S.eng[d]) delete S.eng[d]; else S.eng[d]=true; save(); render(); }
+function sentToggle(d,i){ const c=S.engSent[d]||[]; const idx=c.indexOf(i); if(idx>=0)c.splice(idx,1); else c.push(i); S.engSent[d]=c; save(); render(); }
+
+// ================= ⑨ 复盘 =================
+function renderReview(pd, tk){
+  const r=S.review[tk]||{};
+  // 自动汇总
+  const doneBits=[], leftBits=[];
+  const V=VIDEO_THEMES[wrapDay(pd)-1], T=TEA_DAILY[wrapDay(pd)-1], E=ENG_DAILY[wrapDay(pd)-1], F=FIT_PLAN[wrapDay(pd)-1];
+  if(S.video[pd]) doneBits.push(`短视频《${V.theme}》已发布`); else leftBits.push('短视频今日未发布');
+  const teaDone=T.tasks.filter((_,i)=>S.teaDaily[pd+'-'+i]).length;
+  if(teaDone===3) doneBits.push('擂茶3件事全部完成'); else leftBits.push(`擂茶3件事完成${teaDone}/3`);
+  if(S.eng[pd]) doneBits.push(`英语已学（${E.topic}）`); else leftBits.push('英语未打卡');
+  if(S.fit[pd]) doneBits.push(`健身已打卡（${F.type}）`); else leftBits.push('健身未打卡');
+  const tk2=(S.tasks[tk]||[]); const td=tk2.filter(t=>t.done).length;
+  doneBits.push(`自建任务完成 ${td}/${tk2.length}`);
+  tk2.filter(t=>!t.done).forEach(t=>leftBits.push(t.text));
+  doneBits.push(`民宿清单 ${(S.bnb[tk]||[]).length}/8`);
+
+  const hist=Object.keys(S.review).sort().reverse().slice(0,14);
+  $('#view').innerHTML=`
+  <div class="title-card">
+    <div class="ic-box">📝</div>
+    <div class="t-info">
+      <h2>每日复盘</h2>
+      <p>自动汇总今日数据 · 手动补充细节 · 一键复制发群</p>
+    </div>
+    <div class="t-tag">${hist.length} 篇存档</div>
+  </div>
+  <div class="quote-band">🌙 晚上花5分钟：完成什么、留下什么、明天最重要的是什么。写下来，大脑才能放空睡觉。</div>
+  <div class="card">
+    <div class="card-t"><span class="lft">📝 今晚复盘（自动汇总+手动补充）</span><button class="btn sm" onclick="saveReview()">保存复盘</button></div>
+    <div class="rev-field"><label>✅ 今日完成（自动汇总）</label>
+      <textarea id="rv-done" rows="4">${esc(r.done||doneBits.join('\n'))}</textarea>
+      <div class="desc" style="margin-top:4px">自动：${doneBits.map(esc).join(' · ')}</div></div>
+    <div class="rev-field"><label>📦 今日遗留（自动汇总）</label>
+      <textarea id="rv-left" rows="3">${esc(r.left||leftBits.join('\n'))}</textarea>
+      <div class="desc" style="margin-top:4px">自动：${leftBits.length?leftBits.map(esc).join(' · '):'无 🎉'}</div></div>
+    <div class="rev-field"><label>🎯 明日重点（最多3件）</label><textarea id="rv-tomorrow" rows="3" placeholder="1. …&#10;2. …&#10;3. …">${esc(r.tomorrow||'')}</textarea></div>
+    <div class="rev-field"><label>🍵 擂茶产品进度</label><textarea id="rv-tea" rows="3" placeholder="今日推进：…&#10;卡点：…&#10;明日动作：…">${esc(r.tea||'')}</textarea></div>
+    <div class="rev-field"><label>🏡 民宿运营复盘</label><textarea id="rv-bnb" rows="2" placeholder="入住/客诉/卫生/财务要点…">${esc(r.bnb||'')}</textarea></div>
+    <div class="rev-field"><label>🌱 个人成长复盘</label><textarea id="rv-self" rows="2" placeholder="健身/英语/心态一句话…">${esc(r.self||'')}</textarea></div>
+    <button class="btn warn" onclick="copyReview()">📋 复制成完整日报（可发工作群/发给AI）</button>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🗂️ 历史复盘</span></div>
+    ${hist.map(k=>`
+      <div class="rev-hist">
+        <div class="rev-hist-t" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+          <span>${k.slice(5).replace('-','/')}（第${dayNumOf(k)||'?'}天）</span><span>▾</span></div>
+        <div class="rev-hist-b" style="display:none">${esc(reviewText(k))}</div>
+      </div>`).join('')||'<div class="desc">保存第一份复盘后，历史记录会出现在这里</div>'}
+  </div>`;
+}
+function reviewText(k){
+  const r=S.review[k]; if(!r) return '';
+  return `✅ 今日完成：\n${r.done}\n\n📦 今日遗留：\n${r.left}\n\n🎯 明日重点：\n${r.tomorrow}\n\n🍵 擂茶进度：\n${r.tea}\n\n🏡 民宿复盘：\n${r.bnb}\n\n🌱 个人成长：\n${r.self}`;
+}
+function saveReview(){
+  const k=todayKey();
+  S.review[k]={ done:$('#rv-done').value, left:$('#rv-left').value, tomorrow:$('#rv-tomorrow').value, tea:$('#rv-tea').value, bnb:$('#rv-bnb').value, self:$('#rv-self').value };
+  save(); toast('复盘已保存 ✓'); render();
+}
+function copyReview(){
+  const k=todayKey();
+  const txt=`【观粟主理人日报 ${k}】\n\n✅ 今日完成：\n${$('#rv-done').value}\n\n📦 今日遗留：\n${$('#rv-left').value}\n\n🎯 明日重点：\n${$('#rv-tomorrow').value}\n\n🍵 擂茶进度：\n${$('#rv-tea').value}\n\n🏡 民宿复盘：\n${$('#rv-bnb').value}\n\n🌱 个人成长：\n${$('#rv-self').value}`;
+  copyText(txt);
+}
+
+// ================= ⑩ IP人设 =================
+function renderIp(){
+  const IP=IP_CONTENT;
+  $('#view').innerHTML=`
+  <div class="title-card">
+    <div class="ic-box">✨</div>
+    <div class="t-info">
+      <h2>IP 人设经营</h2>
+      <p>真诚 · 扎根乡土 · 取舍通透 · 长期主义 · 小而美深耕</p>
+    </div>
+    <div class="t-tag">内容统一输出</div>
+  </div>
+  <div class="quote-band">🎤 你不是"网红"，你是"宁化本土文旅创业者"。说具体的人、具体的事、具体的茶和酒——观众记住的是真实。</div>
+  <div class="card">
+    <div class="card-t"><span class="lft">✨ 主理人人设定位</span></div>
+    <div class="kw-chips">${IP.keywords.map(k=>`<span class="kw">${esc(k)}</span>`).join('')}</div>
+    <div class="desc" style="margin-top:12px">所有内容统一输出风格：<b>真诚、扎根乡土、取舍通透、长期主义、小而美深耕、本土文旅创业者</b>。不空话、不鸡汤、多说具体的人和事。</div>
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">📝 三种文案风格模板（点击复制）</span></div>
+    ${Object.values(IP.styles).map((st,i)=>{ const key=Object.keys(IP.styles)[i]; return `
+    <div class="style-card"><div class="style-t">${esc(st.title)}</div><div class="style-c">${esc(st.content)}</div><button class="copy-btn" onclick="copyText(IP_CONTENT.styles['${key}'].content,this)">复制</button></div>`; }).join('')}
+  </div>
+  <div class="card">
+    <div class="card-t"><span class="lft">🎯 人设选题库（12个）</span></div>
+    <div class="kw-chips">${IP.topics.map((t,i)=>`<span class="kw" style="cursor:pointer;background:#fdf5f0;color:var(--c-video)" onclick="copyText('请以宁化观粟民宿主理人视角，为选题「${esc(t)}」写一条短视频口播脚本+朋友圈文案，风格真诚扎根乡土。')">${esc(t)} 📋</span>`).join('')}</div>
+    <div class="desc" style="margin-top:10px">点击选题 = 复制"该选题的AI创作指令"，发给AI直接出稿</div>
+  </div>`;
+}
+
+// ================= 引导 =================
+function finishOb(){
+  S.startDate=$('#obDate').value||todayISO();
+  const w=parseFloat($('#obWeight').value); if(w) { S.weight0=w; S.weights[planDay()]=w; }
+  save(); $('#obModal').classList.add('hide'); toast('工作台已开启 🌾'); render();
+}
+
+// ================= 分类色 =================
+function catColor(c){
+  return ({ '擂茶产品':'var(--c-tea)','短视频':'var(--c-video)','民宿运营':'var(--c-bnb)','米酒运营':'var(--c-wine)','个人生活':'var(--c-life)' })[c]||'#95a5a6';
+}
+
+// ================= PWA 注册（仅 HTTPS / localhost） =================
+if (location.protocol === 'https:' && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw-studio.js').catch(()=>{});
+  });
+}
+
+// ================= 手机底部Tab =================
+function renderTab(){
+  const tNotDone = ((S.tasks[todayKey()]||[]).filter(t=>!t.done)).length + ((S.tasks[yestKey()]||[]).filter(t=>!t.done)).length;
+  const tabs = [
+    { key:'dash', ic:'🏠', label:'今日', badge:0 },
+    { key:'tea',  ic:'🍵', label:'擂茶', badge:0 },
+    { key:'task', ic:'📅', label:'任务', badge:tNotDone },
+    { key:'more', ic:'☰', label:'更多', badge:0 },
+  ];
+  $('#tabbar').innerHTML = tabs.map(t=>t.key==='more'
+    ? `<button class="tb" onclick="toggleSide()"><span class="ic">${t.ic}</span>${t.label}</button>`
+    : `<button class="tb ${curView===t.key?'on':''}" onclick="go('${t.key}')"><span class="ic">${t.ic}</span>${t.label}${t.badge?`<span class="bdg">${t.badge}</span>`:''}</button>`
+  ).join('');
+}
+
+// ================= 启动 =================
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(!S.startDate&&p.get('start')){ S.startDate=p.get('start'); const w=parseFloat(p.get('weight')); if(w){S.weight0=w;S.weights[1]=w;} save(); }
+  if(!S.startDate){ $('#obDate').value=todayISO(); } else { $('#obModal').classList.add('hide'); }
+  const n=new Date(); const wk=['日','一','二','三','四','五','六'];
+  $('#headerDate').textContent=`${n.getFullYear()}年${n.getMonth()+1}月${n.getDate()}日 星期${wk[n.getDay()]}`;
+  const qv=p.get('view'); if(qv&&VIEWS.some(v=>v.key===qv)) curView=qv;
+  renderNav(); renderTab(); $('#pageTitle').textContent=VIEWS.find(v=>v.key===curView).label; render();
+})();
+</script>
+</body>
+</html>
